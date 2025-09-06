@@ -23,11 +23,9 @@
           <span class="hot-title">{{ item.target.title }}</span>
           <p v-if="getExcerpt(item)" class="excerpt">{{ getExcerpt(item) }}</p>
           <div v-if="getStats(item).length" class="meta">
-            <span
-              v-for="s in getStats(item)"
-              :key="s.key"
-              class="tag"
-            >{{ s.label }} {{ s.value }}</span>
+            <span v-for="s in getStats(item)" :key="s.key" class="tag"
+              >{{ s.label }} {{ s.value }}</span
+            >
           </div>
         </div>
         <span class="open-icon" aria-hidden>↗</span>
@@ -35,38 +33,42 @@
     </ul>
     <!-- eslint-enable vue/no-undef -->
   </div>
-  
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
 
-const list = ref([])
-const api = 'https://m1.apifoxmock.com/m1/7074910-0-default'
+
+
+<script setup>
+import { ref, onMounted } from "vue";
+
+const list = ref([]);
+const api = "https://m1.apifoxmock.com/m1/7074910-0-default";
 
 const getData = async () => {
-  const url = `${api}/zhihuHot/list`
-  const response = await fetch(url)
-  const res = await response.json()
-  list.value = res.data
-}
+  const url = `${api}/zhihuHot/list`;
+  const response = await fetch(url);
+  const res = await response.json();
+  list.value = res.data;
+};
 
-onMounted(() => { void getData() })
+onMounted(() => {
+  void getData();
+});
 
 const onToggle = (url) => {
-  const id = url.split('questions/')[1]
-  window.open(`https://www.zhihu.com/question/${id}`)
-}
+  const id = url.split("questions/")[1];
+  window.open(`https://www.zhihu.com/question/${id}`);
+};
 
 const stripHtml = (html) =>
-  typeof html === 'string' ? html.replace(/<[^>]*>/g, '') : ''
+  typeof html === "string" ? html.replace(/<[^>]*>/g, "") : "";
 
 const formatNumber = (value) => {
-  const n = Number(value)
-  if (!Number.isFinite(n)) return ''
-  if (n >= 10000) return `${(n / 10000).toFixed(n % 10000 ? 1 : 0)}万`
-  return String(n)
-}
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "";
+  if (n >= 10000) return `${(n / 10000).toFixed(n % 10000 ? 1 : 0)}万`;
+  return String(n);
+};
 
 const getThumb = (item) => {
   return (
@@ -74,46 +76,53 @@ const getThumb = (item) => {
     item?.target?.thumbnail ||
     item?.target?.image_url ||
     item?.target?.imageURL ||
-    ''
-  )
-}
+    ""
+  );
+};
 
 const getExcerpt = (item) => {
-  const t = item?.target ?? {}
+  const t = item?.target ?? {};
   const raw =
     t.excerpt ||
     t.excerptText ||
     t.description ||
     t.content ||
     t.detail_text ||
-    ''
-  const text = stripHtml(raw)
-  return text ? text.slice(0, 120) : ''
-}
+    "";
+  const text = stripHtml(raw);
+  return text ? text.slice(0, 120) : "";
+};
 
 const getStats = (item) => {
-  const t = item?.target ?? {}
-  const stats = []
-  const answers = t.answer_count ?? t.answerCount
-  const followers = t.follower_count ?? t.followerCount
-  const comments = t.comment_count ?? t.commentCount
-  const heat = t.hot || t.heat || t.hot_score || t.hotScore
+  const t = item?.target ?? {};
+  const stats = [];
+  const answers = t.answer_count ?? t.answerCount;
+  const followers = t.follower_count ?? t.followerCount;
+  const comments = t.comment_count ?? t.commentCount;
+  const heat = t.hot || t.heat || t.hot_score || t.hotScore;
 
   if (Number.isFinite(Number(answers))) {
-    stats.push({ key: 'answers', label: '回答', value: formatNumber(answers) })
+    stats.push({ key: "answers", label: "回答", value: formatNumber(answers) });
   }
   if (Number.isFinite(Number(comments))) {
-    stats.push({ key: 'comments', label: '评论', value: formatNumber(comments) })
+    stats.push({
+      key: "comments",
+      label: "评论",
+      value: formatNumber(comments),
+    });
   }
   if (Number.isFinite(Number(followers))) {
-    stats.push({ key: 'followers', label: '关注', value: formatNumber(followers) })
+    stats.push({
+      key: "followers",
+      label: "关注",
+      value: formatNumber(followers),
+    });
   }
   if (Number.isFinite(Number(heat))) {
-    stats.push({ key: 'heat', label: '热度', value: formatNumber(heat) })
+    stats.push({ key: "heat", label: "热度", value: formatNumber(heat) });
   }
-  return stats
-}
-
+  return stats;
+};
 </script>
 
 <style scoped>
@@ -149,7 +158,8 @@ const getStats = (item) => {
   border-radius: 10px;
   padding: 14px 16px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  transition: transform 0.12s ease, box-shadow 0.12s ease,
+    border-color 0.12s ease;
   cursor: pointer;
 }
 
