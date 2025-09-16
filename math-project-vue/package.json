@@ -11,9 +11,11 @@
   "dependencies": {
     "@w4ng3/tools": "workspace:*",
     "dayjs": "^1.11.18",
+    "mockjs": "^1.1.0",
     "vue": "^3.5.13"
   },
   "devDependencies": {
+    "@types/mockjs": "^1.0.10",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/tsconfig": "^0.7.0",
     "typescript": "catalog:",
